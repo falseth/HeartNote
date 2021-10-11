@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <conio.h>
 #include <direct.h>
+#include <time.h>
 
 #define MAX_SIZE 1024
 
@@ -10,18 +11,23 @@ int main(void) {
     char content[MAX_SIZE];
 
     // User inputs the text.
+    // TODO: consider newline character.
     printf("Content:\n");
     fgets(content, MAX_SIZE, stdin);
     
-    // Save the text in a file within a subdirectory.
+    // Open a file within a subdirectory for saving.
     _mkdir(".\\Entries");
-    FILE *fptr = fopen(".\\Entries\\entry.txt", "w");
+    FILE *fptr = fopen(".\\Entries\\entry.txt", "a");
     if (fptr == NULL) {
         printf("AN ERROR OCCURRED\n");
         _getch();
         exit(1);
     }
-    fprintf(fptr, "%s", content);
+
+    // Save the text with a timestamp.
+    time_t rawtime = time(NULL);
+    fprintf(fptr, "%s", ctime(&rawtime));
+    fprintf(fptr, "%s\n", content);
     fclose(fptr);
 
     printf("TEXT SUCCESSFULLY SAVED\n");
